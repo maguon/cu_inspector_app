@@ -1,0 +1,3 @@
+rootProject.name = 'cu_inspector_app'
+
+include ':app'
