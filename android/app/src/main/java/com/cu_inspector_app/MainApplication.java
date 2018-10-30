@@ -3,6 +3,7 @@ package com.cu_inspector_app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.jeepeng.react.xgpush.PushPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AMapGeolocationPackage(),
             new RNCameraPackage(),
             new PushPackage(),
             new VectorIconsPackage()
