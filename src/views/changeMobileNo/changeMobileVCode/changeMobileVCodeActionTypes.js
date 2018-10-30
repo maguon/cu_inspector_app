@@ -1,0 +1,7 @@
+export const get_vCodeForChangeMobile_success = 'get_vCodeForChangeMobile_success'
+export const get_vCodeForChangeMobile_failed = 'get_vCodeForChangeMobile_failed'
+export const get_vCodeForChangeMobile_waiting = 'get_vCodeForChangeMobile_waiting'
+export const get_vCodeForChangeMobile_error = 'get_vCodeForChangeMobile_error'
+
+export const countDownForChangeMobile_start = 'countDownForChangeMobile_start'
+export const countDownForChangeMobile_end = 'countDownForChangeMobile_end'

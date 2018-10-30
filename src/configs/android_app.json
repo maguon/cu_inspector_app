@@ -1,0 +1,38 @@
+{
+  "version": "0.0.5",
+  "appType": "2",
+  "OS": 1,
+  "stage": 0,
+  "stageList": [
+    [
+      0,
+      {
+        "value": "测试版",
+        "alias": "debug"
+      }
+    ],
+    [
+      4,
+      {
+        "value": "正式版",
+        "alias": "release"
+      }
+    ]
+  ],
+  "OSList": [
+    [
+      1,
+      "android"
+    ],
+    [
+      2,
+      "ios"
+    ]
+  ],
+  "versionlog": [
+    {
+      "version": "0.0.1",
+      "data": "20180209"
+    }
+  ]
+}
