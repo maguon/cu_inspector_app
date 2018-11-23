@@ -3,10 +3,14 @@ package com.cu_inspector_app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import com.imagepicker.ImagePickerPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.jeepeng.react.xgpush.PushPackage;
+import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.github.yamill.orientation.OrientationPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -27,16 +31,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new AMapGeolocationPackage(),
+            new PickerPackage(),
+            new RNSpinkitPackage(),
+            new ImagePickerPackage(),
             new RNCameraPackage(),
             new PushPackage(),
-            new VectorIconsPackage()
+            new AMapGeolocationPackage(),
+            new VectorIconsPackage(),
+            new OrientationPackage()
       );
-    }
-
-    @Override
-    protected String getJSMainModuleName() {
-      return "index";
     }
   };
 

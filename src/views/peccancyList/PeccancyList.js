@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet, InteractionManager } from 'react-native'
 import { Container, Icon, Spinner } from 'native-base'
 import globalStyles, { styleColor } from '../../styles/GlobalStyles'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import * as reduxActions from '../../reduxActions'
+import { Actions } from 'react-native-router-flux'
 
 const styles = StyleSheet.create({
     listEmptyContainer: {
@@ -27,9 +28,13 @@ const styles = StyleSheet.create({
 })
 
 const renderItem = props => {
-    const { navigation, item, item: { license_plate = '', address = '', created_on } } = props
+    const { sceneKey, item, getPeccancyImageListWaiting, getPeccancyImageList, item: { license_plate = '', address = '', created_on, id } } = props
     return (
-        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => navigation.navigate('PeccancyInfo', { peccancy: item })}>
+        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
+            getPeccancyImageListWaiting()
+            Actions.peccancyInfoAtSettingBlock({ peccancy: item, previousViewName: sceneKey })
+            InteractionManager.runAfterInteractions(() => getPeccancyImageList({ peccancyId: id }))
+        }}>
             <View style={{ alignSelf: 'stretch', width: 1, backgroundColor: '#ddd', marginLeft: 7.5 }} />
             <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: '#ddd', marginLeft: -4.5 }} />
             <View style={{ marginHorizontal: 7.5, paddingVertical: 13.5, flex: 1, borderBottomColor: '#ddd', borderBottomWidth: 0.5 }}>
@@ -74,8 +79,8 @@ const renderEmpty = () => {
 
 const PeccancyList = props => {
     // console.log('props', props)
-    const { navigation, navigation: { state: { params: { dateId } } }, getPeccancyListMore, peccancyListReducer,
-    peccancyListReducer: { data: { peccancyList, isComplete }, getPeccancyList } } = props
+    const { sceneKey, dateId, getPeccancyListMore, peccancyListReducer, getPeccancyImageListWaiting, getPeccancyImageList,
+        peccancyListReducer: { data: { peccancyList, isComplete }, getPeccancyList } } = props
     if (getPeccancyList.isResultStatus == 1) {
         return (
             <Container>
@@ -97,7 +102,7 @@ const PeccancyList = props => {
                     ListEmptyComponent={renderEmpty}
                     ListFooterComponent={peccancyListReducer.getPeccancyListMore.isResultStatus == 1 ? ListFooterComponent : <View />}
                     data={peccancyList}
-                    renderItem={({ item }) => renderItem({ item, navigation })} />
+                    renderItem={({ item }) => renderItem({ item, sceneKey, getPeccancyImageListWaiting, getPeccancyImageList })} />
             </Container>
         )
     }
@@ -112,6 +117,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     getPeccancyListMore: param => {
         dispatch(reduxActions.peccancyList.getPeccancyListMore(param))
+    },
+    getPeccancyImageListWaiting: () => {
+        dispatch(reduxActions.peccancyInfo.getPeccancyImageListWaiting())
+    },
+    getPeccancyImageList: param => {
+        dispatch(reduxActions.peccancyInfo.getPeccancyImageList(param))
     }
 })
 

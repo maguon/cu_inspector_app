@@ -1,0 +1,4 @@
+export const modify_superviseAvatarImage_success = 'modify_superviseAvatarImage_success'
+export const modify_superviseAvatarImage_failed = 'modify_superviseAvatarImage_failed'
+export const modify_superviseAvatarImage_error = 'modify_superviseAvatarImage_error'
+export const modify_superviseAvatarImage_waiting = 'modify_superviseAvatarImage_waiting'

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as reduxActions from '../../reduxActions'
-
+import Spinkit from 'react-native-spinkit'
 import {
     Linking,
     ImageBackground,
     View,
     Text,
-    // Button,
     StyleSheet,
     Dimensions,
     StatusBar
@@ -27,7 +26,8 @@ class InitView extends Component {
     }
 
     componentDidMount() {
-         this.props.validateVersion(this.props.navigation)
+        this.props.initWaiting()
+        this.props.validateVersion()
     }
 
 
@@ -42,16 +42,14 @@ class InitView extends Component {
     }
 
     render() {
-        // const { initializationReducer: { data, initAPP, validateVersion } } = this.props
+        const { initViewReducer: { data, initAPP, validateVersion }, initViewReducer } = this.props
+        // console.log('initViewReducer', initViewReducer)
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true} />
                 <ImageBackground source={{ uri: 'init_back' }} style={styles.image}>
-                    {/* <Button onPress={() => this.props.navigation.navigate('Home')}>
-                        <Text>login</Text>
-                    </Button> */}
-                    {/* {initAPP.isResultStatus == 1 && <Spinkit type={'Wave'}
-                        color='rgba(255,255,255,0.5)'
+                    {initAPP.isResultStatus == 1 && <Spinkit type={'Wave'}
+                        color='rgba(255,215,0,0.7)'
                         size={70}
                         style={{ marginBottom: 50, alignSelf: 'center' }}
                         isVisible={initAPP.isResultStatus == 1} />}
@@ -66,7 +64,7 @@ class InitView extends Component {
                     {(initAPP.isResultStatus == 2 && initAPP.step == 1) &&
                         <Button block onPress={this.props.initPush} style={styles.button}>
                             <Text style={styles.buttonTiltle}>重新获取deviceToken</Text>
-                        </Button>} */}
+                        </Button>}
                 </ImageBackground>
             </View>
         )
@@ -100,15 +98,22 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        // initializationReducer: state.initializationReducer
+        initViewReducer: state.initViewReducer
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    validateVersion: (navigation) => {
-        dispatch(reduxActions.initView.validateVersion(navigation))
+    validateVersion: () => {
+        dispatch(reduxActions.initView.initWaiting())
+        dispatch(reduxActions.initView.validateVersion())
+    },
+    initPush: () => {
+        dispatch(reduxActions.initView.initWaiting())
+        dispatch(reduxActions.initView.initPush())
+    },
+    initWaiting: () => {
+        dispatch(reduxActions.initView.initWaiting())
     }
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InitView)

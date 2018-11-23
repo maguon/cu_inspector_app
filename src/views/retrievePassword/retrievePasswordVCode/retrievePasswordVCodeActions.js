@@ -26,9 +26,9 @@ export const getVCode = param => async (dispatch) => {
         // const {loginReducer: { data: { user: { id } } }} =getState()
         dispatch({ type: reduxActionTypes.retrievePasswordVCode.get_vCodeForRetrievePassword_waiting, payload: {} })
         const url = `${base_host}/phone/${param}/supervisePswdSms`
-        console.log('url', url)
+        // console.log('url', url)
         const res = await httpRequest.post(url, {})
-        console.log('res', res)
+        // console.log('res', res)
         if (res.success) {
             dispatch({ type: reduxActionTypes.retrievePasswordVCode.get_vCodeForRetrievePassword_success, payload: {} })
             dispatch(countDown())

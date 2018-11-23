@@ -5,7 +5,8 @@ const initialState = {
     data: {
         scanCountRecordList: [],
         search: null,
-        isComplete: false
+        isComplete: false,
+        isModalVisible:false
     },
     getScanCountList: {
         isResultStatus: 0,
@@ -26,6 +27,7 @@ export default handleActions({
         return {
             ...state,
             data: {
+                ...state.data,
                 scanCountRecordList,
                 isComplete,
                 //search
@@ -113,6 +115,19 @@ export default handleActions({
                 ...initialState.getScanCountListMore,
                 isResultStatus: 3,
                 errorMsg
+            }
+        }
+    },
+
+
+
+    [(reduxActionTypes.scanCountRecordList.setModalVisible)]: (state, action) => {
+        const { payload: { isModalVisible } } = action
+        return {
+            ...state,
+            data:{
+                ...state.data,
+                isModalVisible
             }
         }
     }

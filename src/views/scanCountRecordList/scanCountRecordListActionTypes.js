@@ -8,3 +8,5 @@ export const get_scanCountRecordListMore_success = 'get_scanCountRecordListMore_
 export const get_scanCountRecordListMore_failed = 'get_scanCountRecordListMore_failed'
 export const get_scanCountRecordListMore_error = 'get_scanCountRecordListMore_error'
 export const get_scanCountRecordListMore_waiting = 'get_scanCountRecordListMore_waiting'
+
+export const setModalVisible = 'setModalVisible'

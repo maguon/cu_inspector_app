@@ -1,14 +1,19 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet ,ToastAndroid} from 'react-native'
 import { Container, Button, Content, Form } from 'native-base'
 import { reduxForm, Field, getFormValues } from 'redux-form'
 import TextBox from '../../components/form/TextBox'
 import RetrievePasswordVCode from './retrievePasswordVCode/RetrievePasswordVCode'
 import globalStyles from '../../styles/GlobalStyles'
 import { connect } from 'react-redux'
+import * as reduxActions from '../../reduxActions'
+import { required } from '../../utils/Validator'
+
+
+const requiredValidator = required('必填')
 
 const RetrievePassword = props => {
-    const { formValues = {} } = props
+    const { formValues = {}, handleSubmit } = props
     return (
         <Container style={globalStyles.container}>
             <Content showsVerticalScrollIndicator={false}>
@@ -18,6 +23,7 @@ const RetrievePassword = props => {
                             <Field name='mobileNo'
                                 component={TextBox}
                                 label='手机号'
+                                validate={[requiredValidator]}
                                 isRequired={true} />
                         </View>
                         <View style={{ flex: 2 }}>
@@ -30,21 +36,24 @@ const RetrievePassword = props => {
                         secureTextEntry={true}
                         isRequired={true}
                         // last={true}
+                        validate={[requiredValidator]}
                         component={TextBox} />
                     <Field name='password'
                         label='新密码'
                         secureTextEntry={true}
                         isRequired={true}
+                        validate={[requiredValidator]}
                         // last={true}
                         component={TextBox} />
                     <Field name='confirmPassword'
                         label='确认密码'
                         secureTextEntry={true}
                         isRequired={true}
-                        last={true}
+                        validate={[requiredValidator]}
+                        // last={true}
                         component={TextBox} />
                 </Form>
-                <Button full style={[globalStyles.styleBackgroundColor, styles.button]} onPress={() => { }}>
+                <Button full style={[globalStyles.styleBackgroundColor, styles.button]} onPress={handleSubmit}>
                     <Text style={[globalStyles.midText, { color: '#fff' }]}>确认</Text>
                 </Button>
             </Content>
@@ -77,4 +86,12 @@ const mapStateToProps = (state) => {
 }
 export default connect(mapStateToProps)(reduxForm({
     form: 'RetrievePasswordForm',
+    onSubmit: (values, dispatch) => {
+        const { password, confirmPassword } = values
+        if(password!=confirmPassword){
+            ToastAndroid.show('两次密码输入不同！',10)
+        }else{
+            dispatch(reduxActions.retrievePassword.retrievePassword(values))
+        }
+    }
 })(RetrievePassword))

@@ -12,7 +12,7 @@ class ChangeMobileVCode extends Component {
 
         const { changeMobileVCodeReducer: { data: { countDownTime } },
             changeMobileVCodeReducer, getVCode } = this.props
-        console.log('countDownTime', countDownTime)
+        // console.log('countDownTime', countDownTime)
         return (
             <Button full disabled={changeMobileVCodeReducer.countDown.isResultStatus == 1} onPress={() => {
                 const warnMsg = validatePhone('您输入的手机号码不正确，请重新输入！')(this.props.mobileNo)

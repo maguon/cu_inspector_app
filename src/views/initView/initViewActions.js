@@ -10,7 +10,8 @@ import { sleep } from '../../utils'
 import XGPush from 'react-native-xinge-push'
 import { ToastAndroid } from 'react-native'
 import XGPushConfig from '../../configs/XGPushConfig.json'
-import { NavigationActions } from 'react-navigation'
+import { Actions } from 'react-native-router-flux'
+
 /** 
  * 
  * initApp : APP初始化
@@ -28,14 +29,12 @@ import { NavigationActions } from 'react-navigation'
  */
 
 //第一步：获取最新version信息
-export const validateVersion = (navigation, tryCount = 1) => async (dispatch, getState) => {
+export const validateVersion = (tryCount = 1) => async (dispatch, getState) => {
     // console.log('android_app', android_app)
     const currentStep = 1
     try {
-        // console.log('navigation', navigation)
 
         // console.log('android_app', android_app)
-        dispatch({ type: reduxActionTypes.initView.init_app_waiting, payload: {} })
         const url = `${base_host}/app${ObjectToUrl({ type: android_app.OS })}`
         // console.log('url', url)
         const res = await httpRequest.get(url)
@@ -94,7 +93,7 @@ export const validateVersion = (navigation, tryCount = 1) => async (dispatch, ge
                 // console.log('versionInfo', versionInfo)
                 await dispatch({ type: reduxActionTypes.initView.valdate_version_success, payload: { versionInfo, step: currentStep } })
                 // console.log('getState', getState())
-                dispatch(initPush(navigation))
+                dispatch(initPush())
                 // dispatch(loadLocalStorage())
             } else {
                 dispatch({ type: reduxActionTypes.initView.valdate_version_low, payload: { versionInfo, step: currentStep } })
@@ -103,13 +102,13 @@ export const validateVersion = (navigation, tryCount = 1) => async (dispatch, ge
             dispatch({ type: reduxActionTypes.initView.valdate_version_failed, payload: { failedMsg: res.msg } })
         }
     } catch (err) {
-        console.log('err', err)
+        // console.log('err', err)
         ToastAndroid.show(`初始化错误:${err}`, 10)
         if (err.message == 'Network request failed') {
             //尝试20次
             if (tryCount < 20) {
                 await sleep(1000)
-                dispatch(validateVersion(navigation, tryCount + 1))
+                dispatch(validateVersion(tryCount + 1))
             } else {
                 dispatch({ type: reduxActionTypes.initView.valdate_version_error, payload: { errorMsg: `${err}` } })
             }
@@ -121,30 +120,27 @@ export const validateVersion = (navigation, tryCount = 1) => async (dispatch, ge
 
 
 //第二步：获取deviceToken
-export const initPush = (navigation) => async (dispatch) => {
+export const initPush = () => async (dispatch) => {
     const currentStep = 2
     try {
-        // console.log('XGPushConfig', XGPushConfig)
         XGPush.init(XGPushConfig.ACCESSID, XGPushConfig.ACCESSKEY)
         const deviceToken = await XGPush.register('jeepeng')
-        // console.log('deviceToken', deviceToken)
         if (deviceToken) {
             dispatch({ type: reduxActionTypes.initView.init_XGPush_success, payload: { deviceToken, step: currentStep } })
-            // console.log('currentStep', currentStep)
-            dispatch(loadLocalStorage(navigation))
+            dispatch(loadLocalStorage())
         } else {
             dispatch({ type: reduxActionTypes.initView.init_XGPush_failed, payload: { failedMsg: '获取deviceToken错误：deviceToken为空！' } })
         }
     } catch (err) {
-        console.log('err', err)
         ToastAndroid.show(`初始化错误:${err}`, 10)
+        console.log('err', err)
         dispatch({ type: reduxActionTypes.initView.init_XGPush_error, payload: { errorMsg: `${err}` } })
     }
 }
 
 
 //第三步：获取localStorage中的user数据
-export const loadLocalStorage = (navigation) => async (dispatch) => {
+export const loadLocalStorage = () => async (dispatch) => {
     const currentStep = 3
     try {
         // localStorage.remove({ key: localStorageKey.USER })
@@ -155,7 +151,7 @@ export const loadLocalStorage = (navigation) => async (dispatch) => {
         if (localStorageRes.token && localStorageRes.id) {
             // console.log('localStorageRes', localStorageRes)
             dispatch({ type: reduxActionTypes.initView.load_localStorage_success, payload: { userlocalStorage: localStorageRes, step: currentStep } })
-            dispatch(validateToken(navigation))
+            dispatch(validateToken())
         }
         else {
             if (localStorageRes.phone) {
@@ -164,11 +160,11 @@ export const loadLocalStorage = (navigation) => async (dispatch) => {
                 dispatch({ type: reduxActionTypes.login.set_userInfo, payload: { user: {} } })
             }
             dispatch({ type: reduxActionTypes.initView.load_localStorage_failed, payload: { failedMsg: 'localStorage数据不全！' } })
-            navigation.navigate('Login')
+            Actions.mainRoot()
         }
     } catch (err) {
         // ToastAndroid.show(`初始化错误:${err}`, 10)
-        console.log('err', err)
+        // console.log('err', err)
         if (err.name == 'NotFoundError') {
             dispatch({ type: reduxActionTypes.initView.load_localStorage_error, payload: { errorMsg: `${err}` } })
 
@@ -176,13 +172,13 @@ export const loadLocalStorage = (navigation) => async (dispatch) => {
             localStorage.remove({ key: localStorageKey.USER })
             dispatch({ type: reduxActionTypes.initView.load_localStorage_error, payload: { errorMsg: `${err}` } })
         }
-        navigation.navigate('Login')
+        Actions.mainRoot()
     }
 
 }
 
 //第四步:更换service-token ,如果更新成功将登陆数据放入userReducer
-export const validateToken = (navigation, tryCount = 1) => async (dispatch, getState) => {
+export const validateToken = (tryCount = 1) => async (dispatch, getState) => {
     const currentStep = 4
     try {
         const { initViewReducer: { data: { userlocalStorage: { id, token } } } } = getState()
@@ -211,32 +207,39 @@ export const validateToken = (navigation, tryCount = 1) => async (dispatch, getS
                 requestHeaders.set('user-id', id)
                 dispatch({ type: reduxActionTypes.login.set_userInfo, payload: { user } })
                 dispatch({ type: reduxActionTypes.initView.validate_token_success, payload: { step: currentStep } })
+                Actions.mainRoot()
                 // console.log('getState', getState())
-                navigation.navigate('Home')
+
             } else {
                 ToastAndroid.showWithGravity(`登陆失败：无法获取用户信息！`, ToastAndroid.CENTER, ToastAndroid.BOTTOM)
                 dispatch({ type: reduxActionTypes.initView.validate_token_failed, payload: { failedMsg: '无法获取用户信息！' } })
+
             }
         }
         else {
             //判断请求是否成功，如果失败，跳转到登录页
             dispatch({ type: reduxActionTypes.initView.validate_token_failed, payload: { failedMsg: res.msg } })
-            navigation.navigate('Login')
+            Actions.mainRoot()
         }
     } catch (err) {
         ToastAndroid.show(`初始化错误:${err}`, 10)
-        console.log('err', err)
+        // console.log('err', err)
         if (err.message == 'Network request failed') {
             //尝试20次
             if (tryCount < 20) {
                 await sleep(1000)
-                dispatch(validateToken(navigation, tryCount + 1))
+                dispatch(validateToken(tryCount + 1))
             } else {
                 dispatch({ type: reduxActionTypes.initView.validate_token_error, payload: { errorMsg: `${err}` } })
             }
         } else {
             dispatch({ type: reduxActionTypes.initView.validate_token_error, payload: { errorMsg: `${err}` } })
-            navigation.navigate('Login')
+            Actions.mainRoot()
         }
     }
+}
+
+
+export const initWaiting = () => (dispatch) => {
+    dispatch({ type: reduxActionTypes.initView.init_app_waiting, payload: {} })
 }

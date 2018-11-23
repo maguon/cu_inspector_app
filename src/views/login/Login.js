@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { View, Image, Dimensions, StatusBar, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import { connect } from 'react-redux'
 import { Button, Icon, Item, Text, Input, Container } from 'native-base'
-// import { Actions } from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
 import globalStyles, { styleColor } from '../../styles/GlobalStyles'
 import { Field, reduxForm } from 'redux-form'
 import * as reduxActions from '../../reduxActions'
-// import Spinkit from 'react-native-spinkit'
+import Spinkit from 'react-native-spinkit'
 
 const window = Dimensions.get('window')
 const ImageWidth = window.width
@@ -28,51 +28,60 @@ const TextBox = props => {
     )
 }
 
-const Login = props => {
-    const { loginReducer: { loginFlow: { isResultStatus } }, initialValues, formReducer, handleSubmit,navigation } = props
-    return (
-        <Container style={styles.container}>
-            <StatusBar hidden={true} />
-            <ImageBackground
-                source={{ uri: 'login_back' }}
-                style={styles.backgroundImage} >
-                <View style={{ paddingTop: 80 }}>
-                    <View style={styles.logoContainer}>
-                        <Image
-                            source={{ uri: 'logo' }}
-                            style={styles.logo} />
+class Login extends Component {
+    constructor(props) {
+        super(props)
+    }
+
+
+    render() {
+        // console.log('props', this.props)
+        const { loginReducer: { loginFlow: { isResultStatus } }, handleSubmit, sceneKey } = this.props
+        // console.log('formReducer', formReducer)
+        return (
+            <Container style={styles.container}>
+                <StatusBar hidden={true} />
+                <ImageBackground
+                    source={{ uri: 'login_back' }}
+                    style={styles.backgroundImage} >
+                    <View style={{ paddingTop: 80 }}>
+                        <View style={styles.logoContainer}>
+                            <Image
+                                source={{ uri: 'logo' }}
+                                style={styles.logo} />
+                        </View>
+                        <View>
+                            <Image
+                                source={{ uri: 'app_name' }}
+                                style={styles.appname} />
+                        </View>
                     </View>
-                    <View>
-                        <Image
-                            source={{ uri: 'app_name' }}
-                            style={styles.appname} />
-                    </View>
-                </View>
-                {/* {isResultStatus == 1 && <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Spinkit type={'Circle'} color="#fff" size={70} isVisible={isResultStatus == 1} />
-                </View>} */}
-                {isResultStatus != 1 && <View style={styles.formContainer}><Field
-                    name='phone'
-                    iconName='md-person'
-                    placeholderText='请输入用户名'
-                    component={TextBox} />
-                    <Field
-                        name='password'
-                        secureTextEntry={true}
-                        iconName='md-lock'
-                        placeholderText='请输入密码'
+                    {isResultStatus == 1 && <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Spinkit type={'Circle'} color="#fff" size={70} isVisible={isResultStatus == 1} />
+                    </View>}
+                    {isResultStatus != 1 && <View style={styles.formContainer}><Field
+                        name='phone'
+                        iconName='md-person'
+                        placeholderText='请输入用户名'
                         component={TextBox} />
-                    <Button style={[styles.itemButton, globalStyles.styleBackgroundColor]}
-                        onPress={handleSubmit}>
-                        <Text style={[globalStyles.midText, styles.buttonTittle]}>登录</Text>
-                    </Button>
-                    <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('RetrievePassword')}>
-                        <Text style={[globalStyles.midText, styles.linkButtonTittle]}>忘记密码？</Text>
-                    </TouchableOpacity>
-                </View>}
-            </ImageBackground>
-        </Container>
-    )
+                        <Field
+                            name='password'
+                            secureTextEntry={true}
+                            iconName='md-lock'
+                            placeholderText='请输入密码'
+                            component={TextBox} />
+                        <Button style={[styles.itemButton, globalStyles.styleBackgroundColor]}
+                            onPress={handleSubmit}>
+                            <Text style={[globalStyles.midText, styles.buttonTittle]}>登录</Text>
+                        </Button>
+                        <TouchableOpacity style={styles.linkButton} onPress={() => Actions.retrievePassword({ previousViewName: sceneKey })}>
+                            <Text style={[globalStyles.midText, styles.linkButtonTittle]}>忘记密码？</Text>
+                        </TouchableOpacity>
+                    </View>}
+                </ImageBackground>
+            </Container>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -143,8 +152,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         loginReducer: state.loginReducer,
-        initialValues: state.loginReducer.data.user,
-        // formReducer: state.form
+        initialValues: {
+            phone: state.loginReducer.data.user.phone
+        },
+        formReducer: state.form
     }
 }
 
@@ -152,9 +163,8 @@ export default connect(mapStateToProps)(
     reduxForm({
         form: 'loginForm',
         enableReinitialize: true,
-        onSubmit: (values, dispatch, ownProps) => {
-            console.log('ownProps', ownProps)
-            const { navigation } = ownProps
-            dispatch(reduxActions.login.login(values, navigation))
+        destroyOnUnmount: false,
+        onSubmit: (values, dispatch) => {
+            dispatch(reduxActions.login.login(values))
         }
     })(Login))

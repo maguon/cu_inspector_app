@@ -57,5 +57,10 @@ export default handleActions({
                 isResultStatus: 1
             }
         }
+    },
+    [(reduxActionTypes.scan.get_qrCode_init)]: (state, action) => {
+        return {
+            ...initialState
+        }
     }
 }, initialState)

@@ -45,7 +45,7 @@ const initialState = {
 export default handleActions({
     [reduxActionTypes.initView.init_app_waiting]: (state, action) => {
         return {
-            ...initialState,
+            ...state,
             data: {
                 ...state.data
             },

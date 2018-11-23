@@ -1,0 +1,5 @@
+export const get_peccancyImageList_success = 'get_peccancyImageList_success'
+export const get_peccancyImageList_failed = 'get_peccancyImageList_failed'
+export const get_peccancyImageList_waiting = 'get_peccancyImageList_waiting'
+export const get_peccancyImageList_error = 'get_peccancyImageList_error'
+export const clean_peccancyImageList = 'clean_peccancyImageList'

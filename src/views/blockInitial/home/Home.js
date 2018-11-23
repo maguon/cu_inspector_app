@@ -17,6 +17,7 @@ class Home extends Component {
 
     render() {
         const { ...props } = this.props
+        // console.log('this.props',this.props)
         return (
             <Container>
                 <HomeStatistics {...props} />

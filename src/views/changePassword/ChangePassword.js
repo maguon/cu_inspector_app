@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 export default reduxForm({
     form: 'ChangePasswordForm',
     onSubmit: (values, dispatch) => {
-        console.log('values', values)
+        // console.log('values', values)
         const { oldPassword, newPassword, confirmPassword } = values
         if (newPassword == confirmPassword) {
             dispatch(reduxActions.changePassword.changePassword(values))

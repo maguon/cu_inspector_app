@@ -7,9 +7,14 @@ import peccancyListForHomeReducer from './views/blockInitial/home/peccancyListFo
 import scanCountRecordListReducer from './views/scanCountRecordList/scanCountRecordListReducer'
 import peccancyListReducer from './views/peccancyList/peccancyListReducer'
 import changeMobileVCodeReducer from './views/changeMobileNo/changeMobileVCode/changeMobileVCodeReducer'
+import changeMobileNoReducer from './views/changeMobileNo/changeMobileNoReducer'
 import retrievePasswordVCodeReducer from './views/retrievePassword/retrievePasswordVCode/retrievePasswordVCodeReducer'
+import retrievePasswordReducer from './views/retrievePassword/retrievePasswordReducer'
+import peccancyCommitReducer from './views/peccancyCommit/peccancyCommitReducer'
 import scanReducer from './views/blockInitial/scan/scanReducer'
-
+import photoStoreReducer from './views/photostore/photoStoreReducer'
+import peccancyInfoReducer from './views/peccancyInfo/peccancyInfoReducer'
+import settingReducer from './views/blockInitial/setting/settingReducer'
 
 export default combineReducers({
     form: formReducer,
@@ -21,5 +26,11 @@ export default combineReducers({
     peccancyListReducer,
     changeMobileVCodeReducer,
     retrievePasswordVCodeReducer,
-    scanReducer
+    scanReducer,
+    peccancyCommitReducer,
+    changeMobileNoReducer,
+    photoStoreReducer,
+    retrievePasswordReducer,
+    peccancyInfoReducer,
+    settingReducer
 })

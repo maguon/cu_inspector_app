@@ -8,9 +8,11 @@ export const getHomeStatistics = () => async (dispatch, getState) => {
     try {
         const { loginReducer: { data: { user: { id } } } } = getState()
         const url = `${base_host}/supervise/${id}/dayStat?dateId=${moment().format('YYYYMMDD')}`
+        // console.log('url', url)
         const res = await httpRequest.get(url)
+        // console.log('res', res)
         if (res.success) {
-            dispatch({ type: reduxActionTypes.homeStatistics.get_homeStatistics_success, payload: { homeStatistics: res.result[0] } })
+            dispatch({ type: reduxActionTypes.homeStatistics.get_homeStatistics_success, payload: { homeStatistics: res.result[0] ? res.result[0] : {} } })
         } else {
             dispatch({ type: reduxActionTypes.homeStatistics.get_homeStatistics_failed, payload: { failedMsg: res.msg } })
         }

@@ -27,9 +27,9 @@ export const getVCode = param => async (dispatch, getState) => {
         const {loginReducer: { data: { user: { id } } }} =getState()
         dispatch({ type: reduxActionTypes.changeMobileVCode.get_vCodeForChangeMobile_waiting, payload: {} })
         const url = `${base_host}/supervise/${id}/phone/${param}/supervisePhoneSms`
-        console.log('url', url)
+        // console.log('url', url)
         const res = await httpRequest.post(url, {})
-        console.log('res', res)
+        // console.log('res', res)
         if (res.success) {
             dispatch({ type: reduxActionTypes.changeMobileVCode.get_vCodeForChangeMobile_success, payload: {} })
             dispatch(countDown())

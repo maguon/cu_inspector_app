@@ -10,7 +10,7 @@ import { validatePhone } from '../../../utils/Validator'
 const RetrievePasswordVCode = props => {
     const { retrievePasswordVCodeReducer: { data: { countDownTime } },
         retrievePasswordVCodeReducer, getVCode } = props
-    console.log('countDownTime', countDownTime)
+    // console.log('countDownTime', countDownTime)
     return (
         <Button
             full

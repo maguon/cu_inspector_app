@@ -7,3 +7,8 @@ export const get_peccancyListForHomeMore_success = 'get_peccancyListForHomeMore_
 export const get_peccancyListForHomeMore_failed = 'get_peccancyListForHomeMore_failed'
 export const get_peccancyListForHomeMore_error = 'get_peccancyListForHomeMore_error'
 export const get_peccancyListForHomeMore_waiting = 'get_peccancyListForHomeMore_waiting'
+
+export const change_peccancyStatus_success = 'change_peccancyStatus_success'
+export const change_peccancyStatus_failed = 'change_peccancyStatus_failed'
+export const change_peccancyStatus_error = 'change_peccancyStatus_error'
+export const change_peccancyStatus_waiting = 'change_peccancyStatus_waiting'

@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import {
     AppRegistry,
@@ -7,18 +6,20 @@ import {
     Text,
     TouchableHighlight,
     Animated,
-    View
-} from 'react-native';
-import Camera from 'react-native-camera';
+    View,
+    Button
+} from 'react-native'
+import Camera from 'react-native-camera'
 import { connect } from 'react-redux'
 import * as reduxActions from '../../../reduxActions'
+import { base_host } from '../../../configs/Host'
+import { Actions } from 'react-native-router-flux';
 
 const previewWidth = 240
 const previewHeight = 240
 const window = Dimensions.get('window')
 
 class Scan extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -31,15 +32,26 @@ class Scan extends Component {
 
     onBarCodeRead(e) {
         const { scanReducer: { getQrCode } } = this.props
-        if (getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2) {
-            // console.log(e)
+        const { sceneKey } = this.props
+        // console.log(getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2 &&`${e.data}`.includes(`${base_host}/qrCode/`))
+        if (getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2 && `${e.data}`.includes(`${base_host}/qrCode/`)) {
+            // 
             // console.log(
             //     "Barcode Found!",
             //     "Type: " + e.type + "\nData: " + e.data
             // );
-            this.props.getQrCode(e.data)
+            this.props.getQrCode({ url: e.data, sceneKey })
         }
+    }
 
+
+    componentWillReceiveProps(nextProps) {
+        const { isCameraRefresh } = nextProps
+        if (isCameraRefresh) {
+            this.camera.stopPreview()
+            this.camera.startPreview()
+            Actions.refresh({ isCameraRefresh: false })
+        }
     }
 
     componentDidMount() {
@@ -58,7 +70,6 @@ class Scan extends Component {
             }, 5100)
     }
 
-
     componentWillUnmount() {
         clearInterval(this.interval)
     }
@@ -67,6 +78,7 @@ class Scan extends Component {
         return (
             <View style={styles.container}>
                 <Camera
+                    ref={ref => this.camera = ref}
                     onBarCodeRead={this.onBarCodeRead.bind(this)}
                     style={styles.preview}
                     aspect={Camera.constants.Aspect.fill} />
@@ -122,8 +134,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     getQrCode: param => {
-        const { navigation } = ownProps
-        dispatch(reduxActions.scan.getQrCode(param, navigation))
+        dispatch(reduxActions.scan.getQrCode(param))
+    },
+    getQrCodeInit: () => {
+        dispatch(reduxActions.scan.getQrCodeInit())
     }
 })
 

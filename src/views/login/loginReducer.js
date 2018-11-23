@@ -116,12 +116,12 @@ export default handleActions({
 
 
     [reduxActionTypes.login.clean_login]: (state, action) => {
-        const { payload: { mobile } } = action
+        const { payload: { phone } } = action
         return {
             ...initialState,
             data: {
                 user: {
-                    mobile
+                    phone
                 }
             }
         }

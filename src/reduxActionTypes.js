@@ -6,8 +6,14 @@ import * as scanCountRecordList from './views/scanCountRecordList/scanCountRecor
 import * as peccancyList from './views/peccancyList/peccancyListActionTypes'
 import * as changePassword from './views/changePassword/changePasswordActionTypes'
 import * as changeMobileVCode from './views/changeMobileNo/changeMobileVCode/changeMobileVCodeActionTypes'
+import * as changeMobileNo from './views/changeMobileNo/changeMobileNoActionTypes'
 import * as retrievePasswordVCode from './views/retrievePassword/retrievePasswordVCode/retrievePasswordVCodeActionTypes'
+import * as retrievePassword from './views/retrievePassword/retrievePasswordActionTypes'
+import * as peccancyCommit from './views/peccancyCommit/peccancyCommitActionTypes'
 import * as scan from './views/blockInitial/scan/scanActionTypes'
+import * as photostore from './views/photostore/photoStoreActionTypes'
+import * as peccancyInfo from './views/peccancyInfo/peccancyInfoActionTypes'
+import * as setting from './views/blockInitial/setting/settingActionTypes'
 
 export {
     initView,
@@ -18,6 +24,12 @@ export {
     peccancyList,
     changePassword,
     changeMobileVCode,
+    changeMobileNo,
     retrievePasswordVCode,
-    scan
+    retrievePassword,
+    scan,
+    peccancyCommit,
+    photostore,
+    peccancyInfo,
+    setting
 }

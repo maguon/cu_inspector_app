@@ -8,24 +8,25 @@ import { ObjectToUrl } from '../../utils'
 import { ToastAndroid } from 'react-native'
 import * as android_app from '../../configs/android_app.json'
 
-export const cleanLogin = () => (dispatch, getState) => {
+export const cleanLogin = param => (dispatch, getState) => {
     // const { loginReducer: { data: { user } } } = getState()
-    // localStorage.save({
-    //     key: localStorageKey.USER,
-    //     data: {
-    //         mobile: user.mobile
-    //     }
-    // })
-    //dispatch({ type: actionTypes.loginTypes.clean_login, payload: { mobile: user.mobile } })
+     console.log('param',param)
+    
+    localStorage.save({
+        key: localStorageKey.USER,
+        data: {
+            phone: param.phone
+        }
+    })
+    dispatch({ type: reduxActionTypes.login.clean_login, payload: { phone: param.phone } })
 }
 
-export const login = (param, navigation, tryCount = 1) => async (dispatch, getState) => {
+export const login = (param, tryCount = 1) => async (dispatch, getState) => {
     try {
         // console.log('android_app', android_app)
         // console.log('param', param)
         dispatch({ type: reduxActionTypes.login.login_waiting, payload: {} })
         const { phone, password } = param
-        // console.log('navigation', navigation)
         const { initViewReducer: { data: {
             version: { currentVersion },
             deviceInfo: { deviceToken } } } } = getState()
@@ -50,8 +51,8 @@ export const login = (param, navigation, tryCount = 1) => async (dispatch, getSt
                         id, phone, user_name, type, gender, avatar_image, status,
                         token: res.result.accessToken
                     }
-                    console.log('user',user)
-                    console.log('auth-token',res.result.accessToken)
+                    // console.log('user', user)
+                    // console.log('auth-token', res.result.accessToken)
                     requestHeaders.set('auth-token', res.result.accessToken)
                     requestHeaders.set('user-type', type)
                     requestHeaders.set('user-name', phone)
@@ -61,8 +62,7 @@ export const login = (param, navigation, tryCount = 1) => async (dispatch, getSt
                         data: user
                     })
                     dispatch({ type: reduxActionTypes.login.login_success, payload: { user } })
-                    // console.log('getState',getState())
-                    navigation.navigate('Home')
+
                 } else {
                     ToastAndroid.showWithGravity(`登陆失败：无法获取用户信息！`, ToastAndroid.CENTER, ToastAndroid.BOTTOM)
                     dispatch({ type: reduxActionTypes.login.login_failed, payload: { failedMsg: '无法获取用户信息！' } })
@@ -83,7 +83,7 @@ export const login = (param, navigation, tryCount = 1) => async (dispatch, getSt
             //尝试20次
             if (tryCount < 20) {
                 await sleep(1000)
-                dispatch(login(param, navigation, tryCount + 1))
+                dispatch(login(param, tryCount + 1))
             } else {
                 ToastAndroid.showWithGravity(`登陆失败：网络链接失败！`, ToastAndroid.CENTER, ToastAndroid.BOTTOM)
                 dispatch({ type: reduxActionTypes.login.login_error, payload: { errorMsg: `${err}` } })
