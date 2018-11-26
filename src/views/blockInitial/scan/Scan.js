@@ -9,11 +9,12 @@ import {
     View,
     Button
 } from 'react-native'
-import Camera from 'react-native-camera'
+import { RNCamera as Camera } from 'react-native-camera';
 import { connect } from 'react-redux'
 import * as reduxActions from '../../../reduxActions'
 import { base_host } from '../../../configs/Host'
 import { Actions } from 'react-native-router-flux';
+// import QRCodeScanner from '../../../components/QRCodeScanner';
 
 const previewWidth = 240
 const previewHeight = 240
@@ -33,17 +34,10 @@ class Scan extends Component {
     onBarCodeRead(e) {
         const { scanReducer: { getQrCode } } = this.props
         const { sceneKey } = this.props
-        // console.log(getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2 &&`${e.data}`.includes(`${base_host}/qrCode/`))
-        if (getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2 && `${e.data}`.includes(`${base_host}/qrCode/`)) {
-            // 
-            // console.log(
-            //     "Barcode Found!",
-            //     "Type: " + e.type + "\nData: " + e.data
-            // );
+        if (getQrCode.isResultStatus != 1 && getQrCode.isResultStatus != 2 ) {
             this.props.getQrCode({ url: e.data, sceneKey })
         }
     }
-
 
     componentWillReceiveProps(nextProps) {
         const { isCameraRefresh } = nextProps
@@ -81,7 +75,11 @@ class Scan extends Component {
                     ref={ref => this.camera = ref}
                     onBarCodeRead={this.onBarCodeRead.bind(this)}
                     style={styles.preview}
-                    aspect={Camera.constants.Aspect.fill} />
+                    type={'back'} />
+                {/* <QRCodeScanner
+                    onRead={this.onBarCodeRead}
+
+                /> */}
                 <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
                     <View style={{ width: window.width, height: (window.height - previewHeight) / 2 - 100, backgroundColor: 'rgba(0,0,0,0.4)' }} />
                     <View style={{ width: window.width, height: previewHeight, flexDirection: 'row' }}>
