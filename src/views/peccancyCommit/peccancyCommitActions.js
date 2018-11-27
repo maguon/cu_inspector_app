@@ -44,13 +44,10 @@ export const commitPeccancy = param => async (dispatch, getState) => {
         })
 
         if (res.success) {
-            // console.log('imageInfoList', imageInfoList)
-            // console.log('imageInfoList.length', imageInfoList.length)
             dispatch({ type: reduxActionTypes.peccancyCommit.push_peccancyImage_start, payload: { imagePushCount: imageInfoList.length } })
             const pushImgUrl = `${file_host}/user/${id}/image?imageType=1`
             let index = 0
             for (item of imageInfoList) {
-                // console.log('index', index)
                 const pushImgRes = await httpRequest.postFile(pushImgUrl, {
                     key: 'image',
                     imageUrl: item.uri,
@@ -79,9 +76,13 @@ export const commitPeccancy = param => async (dispatch, getState) => {
             dispatch({ type: reduxActionTypes.peccancyCommit.commit_peccancy_success, payload: {} })
             dispatch(reduxActions.peccancyListForHome.getPeccancyListForHomeWaiting())
             dispatch(reduxActions.peccancyListForHome.getPeccancyListForHome())
-            dispatch(reduxActions.peccancyInfo.getPeccancyImageListWaiting())
-            Actions.peccancyInfoAtScanBlock({ peccancy: { ...param.QrCodeInfo, address: param.address.formatted_address }, previousViewName: param.previousViewName })
-            InteractionManager.runAfterInteractions(() => dispatch(reduxActions.peccancyInfo.getPeccancyImageList({ peccancyId: res.id })))
+            if (param.type == 'toInfo') {
+                dispatch(reduxActions.peccancyInfo.getPeccancyImageListWaiting())
+                Actions.peccancyInfoAtScanBlock({ peccancy: { ...param.QrCodeInfo, address: param.address.formatted_address }, previousViewName: param.previousViewName })
+                InteractionManager.runAfterInteractions(() => dispatch(reduxActions.peccancyInfo.getPeccancyImageList({ peccancyId: res.id })))
+            } else if ((param.type == 'toScan')) {
+                Actions.popTo(param.previousViewName)
+            }
         } else {
             dispatch({ type: reduxActionTypes.peccancyCommit.commit_peccancy_failed, payload: { failedMsg: `${res.msg}` } })
         }

@@ -62,10 +62,9 @@ class PeccancyCommit extends Component {
         } else {
             ToastAndroid.show(`违章照片数量最多${pushImageMAXCount}张！`, 10)
         }
-
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.cleanLocalPeccancyImage()
     }
 
@@ -107,9 +106,7 @@ class PeccancyCommit extends Component {
             return (
                 <TouchableOpacity key={index} style={{ padding: imageMarginSize }}
                     onPress={() => {
-
                         this.setState({ imageBrowserState: true, imageBrowserIndex: index })
-
                     }}
                     onLongPress={() => {
                         if (!this.state.imageState) {
@@ -188,12 +185,20 @@ class PeccancyCommit extends Component {
                         </TouchableOpacity>
                         {renderImageList}
                     </View>
-                    <Button full
-                        style={{ margin: 15, backgroundColor: getAddressByCoordinate.isResultStatus == 2 ? styleColor : '#ccc' }}
-                        disabled={getAddressByCoordinate.isResultStatus != 2}
-                        onPress={() => commitPeccancy({ address, QrCodeInfo, previousViewName })}>
-                        <Text style={[globalStyles.midText, { color: '#fff' }]}>提交并通知司机</Text>
-                    </Button>
+                    <View style={{ margin: 7.5, flexDirection: 'row' }}>
+                        <Button full
+                            style={{ margin: 7.5, flex: 1, backgroundColor: getAddressByCoordinate.isResultStatus == 2 ? styleColor : '#ccc' }}
+                            disabled={getAddressByCoordinate.isResultStatus != 2}
+                            onPress={() => commitPeccancy({ address, QrCodeInfo, previousViewName ,type:'toInfo'})}>
+                            <Text style={[globalStyles.midText, { color: '#fff' }]}>提交后查看详情</Text>
+                        </Button>
+                        <Button full
+                            style={{ margin: 7.5, flex: 1, backgroundColor: getAddressByCoordinate.isResultStatus == 2 ? styleColor : '#ccc' }}
+                            disabled={getAddressByCoordinate.isResultStatus != 2}
+                            onPress={() => commitPeccancy({ address, QrCodeInfo, previousViewName ,type:'toScan'})}>
+                            <Text style={[globalStyles.midText, { color: '#fff' }]}>提交后继续扫描</Text>
+                        </Button>
+                    </View>
                     <Modal visible={this.state.imageBrowserState}
                         transparent={false}
                         animationType={'fade'}
@@ -267,7 +272,7 @@ const mapDispatchToProps = (dispatch) => ({
     delLocalPeccancyImage: param => {
         dispatch(reduxActions.peccancyCommit.delLocalPeccancyImage(param))
     },
-    cleanLocalPeccancyImage:()=>{
+    cleanLocalPeccancyImage: () => {
         dispatch(reduxActions.peccancyCommit.cleanLocalPeccancyImage())
     }
 })

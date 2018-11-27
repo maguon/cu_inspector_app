@@ -10,7 +10,7 @@ export const getQrCode = param => async (dispatch, getState) => {
         const { url, sceneKey } = param
         // console.log('url', url)
         const res = await httpRequest.get(url)
-        // console.log('res', res)
+        //  console.log('res', res)
         if (res.success) {
             if (res.result[0]) {
                 dispatch({ type: reduxActionTypes.scan.get_qrCode_success, payload: {} })

@@ -39,14 +39,14 @@ class Scan extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { isCameraRefresh } = nextProps
-        if (isCameraRefresh) {
-            this.camera.stopPreview()
-            this.camera.startPreview()
-            Actions.refresh({ isCameraRefresh: false })
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     const { isCameraRefresh } = nextProps
+    //     if (isCameraRefresh) {
+    //         // this.camera.stopPreview()
+    //         // this.camera.startPreview()
+    //         Actions.refresh({ isCameraRefresh: false })
+    //     }
+    // }
 
     componentDidMount() {
         /** 获取视频、现场首页信息 */
