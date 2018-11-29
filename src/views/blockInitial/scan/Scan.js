@@ -9,7 +9,7 @@ import {
     View,
     Button
 } from 'react-native'
-import { RNCamera as Camera } from 'react-native-camera';
+import Camera from 'react-native-camera';
 import { connect } from 'react-redux'
 import * as reduxActions from '../../../reduxActions'
 import { base_host } from '../../../configs/Host'
@@ -39,14 +39,14 @@ class Scan extends Component {
         }
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     const { isCameraRefresh } = nextProps
-    //     if (isCameraRefresh) {
-    //         // this.camera.stopPreview()
-    //         // this.camera.startPreview()
-    //         Actions.refresh({ isCameraRefresh: false })
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        const { isCameraRefresh } = nextProps
+        if (isCameraRefresh) {
+            this.camera.stopPreview()
+            this.camera.startPreview()
+            Actions.refresh({ isCameraRefresh: false })
+        }
+    }
 
     componentDidMount() {
         /** 获取视频、现场首页信息 */

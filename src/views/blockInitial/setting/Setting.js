@@ -39,6 +39,7 @@ class Setting extends Component {
         const { sceneKey, getScanCountList, getScanCountListWaiting,
             initViewReducer: { data: { version: { currentVersion = '', force_update, url } } },
             loginReducer: { data: { user: { avatar_image, phone = '', user_name = '', gender } } } } = this.props
+        console.log('this.props', this.props)
         return (
             <Container style={globalStyles.container}>
                 <Content>
@@ -99,7 +100,7 @@ class Setting extends Component {
                             <Text style={{ marginVertical: 15 }}>版本信息</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text>当前版本号{currentVersion}</Text>
-                                {force_update == 0 && <TouchableOpacity style={{ marginLeft: 5 }} onPress={() => {
+                                {force_update == 2 && <TouchableOpacity style={{ marginLeft: 5 }} onPress={() => {
                                     if (url) {
                                         Linking.canOpenURL(url)
                                             .then(supported => {

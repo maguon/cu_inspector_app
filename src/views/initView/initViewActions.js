@@ -8,9 +8,11 @@ import requestHeaders from '../../utils/RequestHeaders'
 import * as android_app from '../../configs/android_app.json'
 import { sleep } from '../../utils'
 import XGPush from 'react-native-xinge-push'
-import { ToastAndroid } from 'react-native'
+import { ToastAndroid ,Platform} from 'react-native'
 import XGPushConfig from '../../configs/XGPushConfig.json'
 import { Actions } from 'react-native-router-flux'
+// import moment = require('moment');
+import DeviceInfo from 'react-native-device-info'
 
 /** 
  * 
@@ -124,7 +126,14 @@ export const initPush = () => async (dispatch) => {
     const currentStep = 2
     try {
         XGPush.init(XGPushConfig.ACCESSID, XGPushConfig.ACCESSKEY)
-        const deviceToken = await XGPush.register('jeepeng')
+        // console.log('start',new Date())
+        const deviceToken = await XGPush.register()
+        // console.log('end',new Date())
+        const deviceId = DeviceInfo.getSerialNumber();
+        // console.log('deviceToken',deviceToken)
+        // console.log('DeviceInfo',DeviceInfo)
+        // console.log('deviceId',Platform)
+        // ToastAndroid.show(deviceId,20)
         if (deviceToken) {
             dispatch({ type: reduxActionTypes.initView.init_XGPush_success, payload: { deviceToken, step: currentStep } })
             dispatch(loadLocalStorage())

@@ -1,5 +1,5 @@
 {
-  "version": "0.0.5",
+  "version": "0.0.1",
   "appType": "2",
   "OS": 1,
   "stage": 0,
@@ -32,7 +32,7 @@
   "versionlog": [
     {
       "version": "0.0.1",
-      "data": "20180209"
+      "data": "20181129"
     }
   ]
 }
