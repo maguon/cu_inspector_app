@@ -12,7 +12,7 @@ import { ToastAndroid ,Platform} from 'react-native'
 import XGPushConfig from '../../configs/XGPushConfig.json'
 import { Actions } from 'react-native-router-flux'
 // import moment = require('moment');
-import DeviceInfo from 'react-native-device-info'
+// import DeviceInfo from 'react-native-device-info'
 
 /** 
  * 
