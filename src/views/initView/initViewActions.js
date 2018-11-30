@@ -129,7 +129,7 @@ export const initPush = () => async (dispatch) => {
         // console.log('start',new Date())
         const deviceToken = await XGPush.register()
         // console.log('end',new Date())
-        const deviceId = DeviceInfo.getSerialNumber();
+        // const deviceId = DeviceInfo.getSerialNumber();
         // console.log('deviceToken',deviceToken)
         // console.log('DeviceInfo',DeviceInfo)
         // console.log('deviceId',Platform)
